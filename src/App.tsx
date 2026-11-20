@@ -6,6 +6,11 @@ import { PracticeView } from './components/PracticeView';
 import { TopBar } from './components/TopBar';
 import { getChallengesForTrack, getTrackKey } from './data/curriculum';
 import {
+  isSoundEnabled,
+  playSound,
+  setSoundEnabled,
+} from './services/soundEffects';
+import {
   Difficulty,
   LanguageId,
   LevelChallenge,
@@ -71,6 +76,16 @@ export default function App() {
   const [workspaceOriginTab, setWorkspaceOriginTab] = useState<NavTab>('arena');
 
   const [progress, setProgress] = useState<UserProgress>(() => loadProgress());
+  const [soundOn, setSoundOn] = useState<boolean>(() => isSoundEnabled());
+
+  const handleToggleSound = () => {
+    const next = !soundOn;
+    setSoundOn(next);
+    setSoundEnabled(next);
+    if (next) {
+      playSound('click');
+    }
+  };
 
   useEffect(() => {
     try {
@@ -138,6 +153,8 @@ export default function App() {
         onSelectTab={handleSelectTab}
         xp={progress.xp}
         streak={progress.streak}
+        soundEnabled={soundOn}
+        onToggleSound={handleToggleSound}
         onBrandClick={() => handleSelectTab('arena')}
       />
 

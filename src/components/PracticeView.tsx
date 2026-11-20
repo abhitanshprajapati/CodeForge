@@ -2,6 +2,7 @@ import { ArrowRight, CheckCircle2, Search, Shuffle } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ALL_CHALLENGES, DIFFICULTIES, LANGUAGES, LANGUAGE_MAP } from '../data/curriculum';
 import { Difficulty, LanguageId, LevelChallenge, UserProgress } from '../types/coding';
+import { playSound } from '../services/soundEffects';
 
 interface PracticeViewProps {
   progress: UserProgress;
@@ -33,6 +34,7 @@ export function PracticeView({ progress, onOpenChallenge }: PracticeViewProps) {
   }, [searchQuery, langFilter, diffFilter]);
 
   const handleRandomDrill = () => {
+    playSound('click');
     const pool = filtered.length > 0 ? filtered : ALL_CHALLENGES;
     const unsolved = pool.filter((c) => !completedSet.has(c.id));
     const source = unsolved.length > 0 ? unsolved : pool;
@@ -84,7 +86,10 @@ export function PracticeView({ progress, onOpenChallenge }: PracticeViewProps) {
           <div className="inline-flex items-center gap-1 rounded-lg border border-slate-800 bg-[#111827] p-1">
             <button
               type="button"
-              onClick={() => setLangFilter('all')}
+              onClick={() => {
+                playSound('click');
+                setLangFilter('all');
+              }}
               className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 langFilter === 'all'
                   ? 'bg-slate-800 text-slate-100'
@@ -97,7 +102,10 @@ export function PracticeView({ progress, onOpenChallenge }: PracticeViewProps) {
               <button
                 key={lang.id}
                 type="button"
-                onClick={() => setLangFilter(lang.id)}
+                onClick={() => {
+                  playSound('click');
+                  setLangFilter(lang.id);
+                }}
                 className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                   langFilter === lang.id
                     ? 'bg-slate-800 text-slate-100'
@@ -113,7 +121,10 @@ export function PracticeView({ progress, onOpenChallenge }: PracticeViewProps) {
           <div className="inline-flex items-center gap-1 rounded-lg border border-slate-800 bg-[#111827] p-1">
             <button
               type="button"
-              onClick={() => setDiffFilter('all')}
+              onClick={() => {
+                playSound('click');
+                setDiffFilter('all');
+              }}
               className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 diffFilter === 'all'
                   ? 'bg-slate-800 text-slate-100'
@@ -126,7 +137,10 @@ export function PracticeView({ progress, onOpenChallenge }: PracticeViewProps) {
               <button
                 key={d}
                 type="button"
-                onClick={() => setDiffFilter(d)}
+                onClick={() => {
+                  playSound('click');
+                  setDiffFilter(d);
+                }}
                 className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                   diffFilter === d
                     ? 'bg-slate-800 text-slate-100'
@@ -148,6 +162,7 @@ export function PracticeView({ progress, onOpenChallenge }: PracticeViewProps) {
             <button
               type="button"
               onClick={() => {
+                playSound('click');
                 setSearchQuery('');
                 setLangFilter('all');
                 setDiffFilter('all');
@@ -176,7 +191,10 @@ export function PracticeView({ progress, onOpenChallenge }: PracticeViewProps) {
                   return (
                     <tr
                       key={challenge.id}
-                      onClick={() => onOpenChallenge(challenge)}
+                      onClick={() => {
+                        playSound('click');
+                        onOpenChallenge(challenge);
+                      }}
                       className="group transition-colors hover:bg-slate-800/40 cursor-pointer"
                     >
                       <td className="py-3.5 pl-5 pr-3">

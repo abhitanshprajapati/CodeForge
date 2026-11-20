@@ -1,4 +1,5 @@
-import { Flame, Trophy } from 'lucide-react';
+import { Flame, Trophy, Volume2, VolumeX } from 'lucide-react';
+import { playSound } from '../services/soundEffects';
 import { NavTab } from '../types/coding';
 
 interface TopBarProps {
@@ -6,6 +7,8 @@ interface TopBarProps {
   onSelectTab: (tab: NavTab) => void;
   xp: number;
   streak: number;
+  soundEnabled: boolean;
+  onToggleSound: () => void;
   onBrandClick: () => void;
 }
 
@@ -20,6 +23,8 @@ export function TopBar({
   onSelectTab,
   xp,
   streak,
+  soundEnabled,
+  onToggleSound,
   onBrandClick,
 }: TopBarProps) {
   return (
@@ -28,10 +33,13 @@ export function TopBar({
         {/* Zone 1: Single-line Brand Wordmark */}
         <button
           type="button"
-          onClick={onBrandClick}
+          onClick={() => {
+            playSound('click');
+            onBrandClick();
+          }}
           className="text-lg font-bold tracking-tight text-slate-100 transition-colors hover:text-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded whitespace-nowrap shrink-0 cursor-pointer"
         >
-          CodeForge
+          Tech Leveling
         </button>
 
         {/* Zone 2: Primary Navigation Tabs */}
@@ -45,7 +53,10 @@ export function TopBar({
               <button
                 key={item.id}
                 type="button"
-                onClick={() => onSelectTab(item.id)}
+                onClick={() => {
+                  playSound('click');
+                  onSelectTab(item.id);
+                }}
                 className={`relative px-2.5 py-2 text-sm font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded ${
                   isActive
                     ? 'text-slate-100'
@@ -64,7 +75,7 @@ export function TopBar({
           })}
         </nav>
 
-        {/* Zone 3: XP & Streak Metrics */}
+        {/* Zone 3: XP, Streak & Sound Toggle */}
         <div className="flex items-center gap-3 sm:gap-4 text-sm shrink-0">
           <div
             className="flex items-center gap-1.5 text-slate-200 whitespace-nowrap shrink-0"
@@ -89,6 +100,27 @@ export function TopBar({
               {streak === 1 ? 'day' : 'days'}
             </span>
           </div>
+
+          <span aria-hidden="true" className="h-4 w-px bg-slate-800" />
+
+          <button
+            type="button"
+            onClick={onToggleSound}
+            aria-label={soundEnabled ? 'Mute sound effects' : 'Enable sound effects'}
+            aria-pressed={soundEnabled}
+            title={soundEnabled ? 'Sound effects on' : 'Sound effects muted'}
+            className={`flex h-8 w-8 items-center justify-center rounded-lg border transition-colors shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
+              soundEnabled
+                ? 'border-slate-700/90 bg-[#111827] text-slate-200 hover:border-slate-600 hover:text-emerald-400'
+                : 'border-slate-800 bg-[#0B0F17] text-slate-500 hover:border-slate-700 hover:text-slate-300'
+            }`}
+          >
+            {soundEnabled ? (
+              <Volume2 className="h-4 w-4" aria-hidden="true" />
+            ) : (
+              <VolumeX className="h-4 w-4" aria-hidden="true" />
+            )}
+          </button>
         </div>
       </div>
     </header>

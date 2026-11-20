@@ -1,6 +1,8 @@
 {
-  "name": "CodeForge",
+  "name": "Tech_Leveling",
   "description": "Gamified coding learning platform with visual level progression maps, split-screen coding workspace, and Gemini-powered code evaluation, quick notes, and hints.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

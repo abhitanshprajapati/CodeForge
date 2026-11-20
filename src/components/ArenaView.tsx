@@ -8,6 +8,7 @@ import {
   getTrackKey,
 } from '../data/curriculum';
 import { Difficulty, LanguageId, LevelChallenge, UserProgress } from '../types/coding';
+import { playSound } from '../services/soundEffects';
 
 interface ArenaViewProps {
   selectedLanguage: LanguageId;
@@ -41,11 +42,13 @@ export function ArenaView({
 
   const handleNodeClick = (challenge: LevelChallenge, isUnlocked: boolean) => {
     if (!isUnlocked) {
+      playSound('error');
       setLockedNotice(
         `Pass Level ${challenge.level - 1} in ${activeLangMeta.name} ${selectedDifficulty} to unlock Level ${challenge.level}.`
       );
       return;
     }
+    playSound('click');
     setLockedNotice(null);
     onOpenLevel(challenge);
   };
@@ -87,6 +90,7 @@ export function ArenaView({
                 key={lang.id}
                 type="button"
                 onClick={() => {
+                  playSound('click');
                   onSelectLanguage(lang.id);
                   setLockedNotice(null);
                 }}
@@ -172,6 +176,7 @@ export function ArenaView({
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => {
+                    playSound('click');
                     onSelectDifficulty(diff);
                     setLockedNotice(null);
                   }}

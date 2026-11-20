@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { LANGUAGES, LANGUAGE_MAP } from '../data/curriculum';
 import { SEED_LEADERBOARD } from '../data/leaderboard';
 import { LanguageId, LeaderboardEntry, UserProgress } from '../types/coding';
+import { playSound } from '../services/soundEffects';
 
 interface LeaderboardViewProps {
   progress: UserProgress;
@@ -63,7 +64,10 @@ export function LeaderboardView({
           <div className="inline-flex items-center gap-1 rounded-lg border border-slate-800 bg-[#111827] p-1">
             <button
               type="button"
-              onClick={() => setTimeframe('all')}
+              onClick={() => {
+                playSound('click');
+                setTimeframe('all');
+              }}
               className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 timeframe === 'all'
                   ? 'bg-emerald-500 text-slate-950 font-semibold'
@@ -74,7 +78,10 @@ export function LeaderboardView({
             </button>
             <button
               type="button"
-              onClick={() => setTimeframe('week')}
+              onClick={() => {
+                playSound('click');
+                setTimeframe('week');
+              }}
               className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 timeframe === 'week'
                   ? 'bg-emerald-500 text-slate-950 font-semibold'
@@ -89,7 +96,10 @@ export function LeaderboardView({
           <div className="inline-flex items-center gap-1 rounded-lg border border-slate-800 bg-[#111827] p-1">
             <button
               type="button"
-              onClick={() => setTrackFilter('all')}
+              onClick={() => {
+                playSound('click');
+                setTrackFilter('all');
+              }}
               className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 trackFilter === 'all'
                   ? 'bg-slate-800 text-slate-100'
@@ -102,7 +112,10 @@ export function LeaderboardView({
               <button
                 key={lang.id}
                 type="button"
-                onClick={() => setTrackFilter(lang.id)}
+                onClick={() => {
+                  playSound('click');
+                  setTrackFilter(lang.id);
+                }}
                 className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                   trackFilter === lang.id
                     ? 'bg-slate-800 text-slate-100'

@@ -14,6 +14,7 @@ import {
 import { KeyboardEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { LANGUAGE_MAP } from '../data/curriculum';
 import { evaluateCode, fetchHint, fetchQuickNotes } from '../services/api';
+import { playLevelPassedSequence, playSound } from '../services/soundEffects';
 import {
   EvaluateResponse,
   LevelChallenge,
@@ -105,6 +106,7 @@ export function CodingWorkspace({
   };
 
   const handleResetCode = () => {
+    playSound('click');
     setCode(challenge.starterCode);
     onCodeChange(challenge.id, challenge.starterCode);
     setEvalResult(null);
@@ -112,6 +114,7 @@ export function CodingWorkspace({
 
   const handleRefreshNotes = async () => {
     if (isLoadingNotes) return;
+    playSound('click');
     setIsLoadingNotes(true);
     const nextPack = notesPackIdx + 1;
     try {
@@ -122,6 +125,7 @@ export function CodingWorkspace({
       );
       setNotesData(res);
       setNotesPackIdx(nextPack);
+      playSound('hint');
     } finally {
       setIsLoadingNotes(false);
     }
@@ -129,6 +133,7 @@ export function CodingWorkspace({
 
   const handleGetHint = async () => {
     if (isLoadingHint) return;
+    playSound('click');
     setIsLoadingHint(true);
     try {
       const res = await fetchHint(
@@ -140,6 +145,7 @@ export function CodingWorkspace({
       setHintText(res.hint);
       setHintNotice(res.fallbackNotice ?? null);
       setHintIndex((prev) => prev + 1);
+      playSound('hint');
     } finally {
       setIsLoadingHint(false);
     }
@@ -147,6 +153,7 @@ export function CodingWorkspace({
 
   const handleRunAndCheck = async () => {
     if (isEvaluating) return;
+    playSound('click');
     setIsEvaluating(true);
     try {
       const res = await evaluateCode(
@@ -157,10 +164,14 @@ export function CodingWorkspace({
       setEvalResult(res);
       if (res.passed) {
         const xpToGrant = res.xp_awarded > 0 ? res.xp_awarded : 50;
-        if (!isAlreadyCompleted) {
+        const earnedNewXp = !isAlreadyCompleted;
+        if (earnedNewXp) {
           setJustAwardedXp(xpToGrant);
         }
+        playLevelPassedSequence(earnedNewXp);
         onLevelPassed(challenge, xpToGrant);
+      } else {
+        playSound('error');
       }
     } finally {
       setIsEvaluating(false);
@@ -209,7 +220,10 @@ export function CodingWorkspace({
           <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
-              onClick={onBack}
+              onClick={() => {
+                playSound('click');
+                onBack();
+              }}
               className="flex items-center gap-1.5 rounded-lg border border-slate-700/90 bg-[#111827] px-3 py-1.5 text-xs font-medium text-slate-200 transition-colors hover:border-slate-600 hover:bg-slate-800 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
             >
               <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
@@ -244,7 +258,10 @@ export function CodingWorkspace({
             {(isAlreadyCompleted || evalResult?.passed) && nextChallenge && (
               <button
                 type="button"
-                onClick={() => onOpenNext(nextChallenge)}
+                onClick={() => {
+                  playSound('click');
+                  onOpenNext(nextChallenge);
+                }}
                 className="flex items-center gap-1.5 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-slate-950 transition-colors hover:bg-emerald-400 whitespace-nowrap shrink-0 cursor-pointer"
               >
                 Next: Level {nextChallenge.level}
@@ -476,7 +493,10 @@ export function CodingWorkspace({
                 </div>
                 <button
                   type="button"
-                  onClick={() => setHintText(null)}
+                  onClick={() => {
+                    playSound('click');
+                    setHintText(null);
+                  }}
                   aria-label="Dismiss hint"
                   className="rounded p-1 text-slate-400 hover:bg-slate-800 hover:text-slate-200 cursor-pointer shrink-0"
                 >
@@ -569,7 +589,10 @@ export function CodingWorkspace({
                     {evalResult.passed && nextChallenge && (
                       <button
                         type="button"
-                        onClick={() => onOpenNext(nextChallenge)}
+                        onClick={() => {
+                          playSound('click');
+                          onOpenNext(nextChallenge);
+                        }}
                         className="flex items-center gap-1.5 self-start sm:self-auto rounded-lg bg-emerald-500 px-3.5 py-2 text-xs font-semibold text-slate-950 transition-colors hover:bg-emerald-400 whitespace-nowrap shrink-0 cursor-pointer"
                       >
                         Continue to Level {nextChallenge.level}
